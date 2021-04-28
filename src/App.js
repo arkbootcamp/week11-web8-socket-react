@@ -33,7 +33,7 @@ function App() {
     <Switch>
         <Route path="/login" component={Login}/>
         <Route path="/register" component={Register} />
-        <Route path="/chatroom/:room" render={(props) => <ChatRoom {...props} socket={socket}/>} />
+        <Route path="/chatroom/" render={(props) => <ChatRoom {...props} socket={socket}/>} />
         <Route path="/dashboard" render={(props) => <Dashboard {...props} socket={socket}/>} />
     </Switch>
   </BrowserRouter>

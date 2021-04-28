@@ -6,12 +6,14 @@ function ChatRoom({ match, location, socket }) {
   const [username, setUsername] = useState('')
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
+  const [idFriend, setIdFriend] = useState(null)
   useEffect(() => {
     const urlQuery = qs.parse(location.search)
     setUsername(urlQuery.username)
 
     if(socket){
       socket.on('receiverMessage', (dataMessage) => {
+        console.log(dataMessage);
         setMessages([...messages, dataMessage])
       })
     }
@@ -22,7 +24,7 @@ function ChatRoom({ match, location, socket }) {
     const urlQuery = qs.parse(location.search)
     const room = match.params.room
     if(socket){
-      socket.emit('initialRoom', { namaRoom: room, username: urlQuery.username})
+      socket.emit('initialUserLogin', localStorage.getItem('id'))
     }
     // component unmount
     // return () => {
@@ -40,31 +42,33 @@ function ChatRoom({ match, location, socket }) {
     const room = match.params.room
     // const dataMessage = {}
     socket.emit('sendMessage', {
-      username: username,
       message: message,
-      room: room
+      receiverId: idFriend
+    }, (data) => {
+      console.log('callback', data);
+      setMessages([...messages, data ])
     })
   }
   return (
     <div className="container">
+      
       <h1 className="text-center mb-5">halaman ChatRoom : {match.params.room}</h1>
       <div className="row">
         <div className="col-md-4">
           <ul class="list-group">
             <li class="list-group-item disabled" >List User</li>
-            <li class="list-group-item">A second item</li>
-            <li class="list-group-item">A third item</li>
-            <li class="list-group-item">A fourth item</li>
-            <li class="list-group-item">And a fifth one</li>
+            <li class="list-group-item" onClick={() => setIdFriend(2)}>Budi</li>
+            <li class="list-group-item" onClick={() => setIdFriend(3)}>Banu</li>
+
           </ul>
          
         </div>
         <div className="col-md-8">
           <div className="wrapper-chat">
           <ul class="list-group">
-            <li class="list-group-item active" aria-current="true">ISI Message</li>
+              <li class="list-group-item active" aria-current="true">ISI Message id {idFriend}</li>
             {messages.map((item, index)=>
-              <li className={`list-group-item ${username === item.username ?  'text-left': 'text-right'}`} key={index}>{item.username+" : "+item.message +' | '+item.time}</li>
+              <li className={`list-group-item`} key={index}>{item.message +' | '+item.time}</li>
             )}
           </ul>
           </div>

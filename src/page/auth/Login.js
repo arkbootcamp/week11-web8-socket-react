@@ -3,10 +3,18 @@ import './auth.css'
 
 function Login(props) {
 const [username, setUsername] = useState("")
-const [room, setRoom] = useState("")
+const [password, setPassword] = useState("")
 
 const handleSubmit = ()=>{
-  props.history.push(`/chatroom/${room}?username=${username}`)
+  let idUser = null
+  if(username === 'admin' && password ==='admin'){
+    idUser = 1
+    localStorage.setItem('id', idUser)
+  } else if(username === 'banu' && password === 'banu'){
+    idUser = 3
+    localStorage.setItem('id', idUser)
+  }
+  props.history.push('/chatroom/')
 }
   return (
     <div className="container">
@@ -20,14 +28,8 @@ const handleSubmit = ()=>{
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Room</label>
-            <select className="form-control" onChange={(e)=>setRoom(e.target.value)}>
-              <option value="">Pilih room</option>
-              <option value="javascript">Javascript</option>
-              <option value="php">PHP</option>
-              <option value="golang">Golang</option>
-            </select>
-            {/* <input type="password" class="form-control" id="exampleInputPassword1" /> */}
+            <label for="exampleInputEmail1">Password</label>
+            <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={(e) => setPassword(e.target.value)} />
           </div>
 
           <button type="submit" class="btn btn-primary">Submit</button>
